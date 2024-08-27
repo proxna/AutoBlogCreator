@@ -2,6 +2,7 @@ using AutoBlogCreator.Middlewares;
 using AutoBlogCreator.Models;
 using AutoBlogCreator.Services;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +31,7 @@ app.MapPost("/article", async (News news, IArticleCreator articleCreator) =>
 app.MapGet("/artwork/{name}", async (string name, ILinkToImageRetriever linkRetriever) =>
     await linkRetriever.GetImageLink(name));
 
-app.MapPost("/article/adjust", (string article, IArticleAdjuster articleAdjuster) =>
-    articleAdjuster.AdjustArticle(article));
+app.MapPost("/article/adjust", (ArticleToAdjust article, IArticleAdjuster articleAdjuster) =>
+    articleAdjuster.AdjustArticle(article.Article));
 
 app.Run();
