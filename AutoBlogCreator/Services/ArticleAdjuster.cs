@@ -14,7 +14,7 @@ namespace AutoBlogCreator.Services
 
             foreach (var tweetLink in GetTweetLinks(article))
             {
-                string urlEncodedTweetLink = System.Web.HttpUtility.UrlEncode(tweetLink);
+                string urlEncodedTweetLink = System.Web.HttpUtility.UrlEncode(tweetLink.Replace("x.com", "twitter.com"));
                 string embedHtml = $"<iframe border=0 frameborder=0 height=250 width=550\r\n src=\"https://twitframe.com/show?url={urlEncodedTweetLink}\"></iframe>";
                 article = article.Replace(tweetLink, embedHtml);
             }
