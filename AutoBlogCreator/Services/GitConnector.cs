@@ -51,5 +51,13 @@ namespace AutoBlogCreator.Services
             string message = $"Add new article {filename}";
             repo.Commit(message, author, committer);
         }
+
+        public void AddFileWithoutCommit(string path)
+        {
+            RepositoryInfo repositoryInfo = new RepositoryInfo();
+            _configuration.GetSection("RepositoryInfo").Bind(repositoryInfo);
+            string fileName = Path.GetFileName(path);
+            StageFile(path, repositoryInfo);
+        }
     }
 }

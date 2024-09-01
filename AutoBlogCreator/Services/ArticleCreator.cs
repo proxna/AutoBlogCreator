@@ -18,7 +18,7 @@ namespace AutoBlogCreator.Services
         {
             string directoryName = GetTitle(content);
             string localPath = _configuration.GetLocalPath();
-            string pathInRepository = Path.Combine("content/posts", directoryName);
+            string pathInRepository = Path.Combine("content", "posts", directoryName);
             string pathInFileRepository = Path.Combine(pathInRepository, "index.md");
             Directory.CreateDirectory(Path.Combine(localPath, pathInRepository));
             string pathToFile = Path.Combine(localPath, pathInFileRepository);
@@ -30,7 +30,7 @@ namespace AutoBlogCreator.Services
         {
             string directoryName = GetTitle(news.Text);
             string localPath = _configuration.GetLocalPath();
-            string pathInRepository = Path.Combine("content/posts", directoryName);
+            string pathInRepository = Path.Combine("content", "posts", directoryName); ;
             Directory.CreateDirectory(Path.Combine(localPath, pathInRepository));
             string imageExtension = await SaveImageFromUrl(news.ImageUrl, pathInRepository);
             string pathInFileRepository = Path.Combine(pathInRepository, "index.md");
@@ -71,7 +71,7 @@ namespace AutoBlogCreator.Services
                 string pathInRepository = Path.Combine(pathToRepo, "image" + extension);
                 string pathToImage = Path.Combine(_configuration.GetLocalPath(), pathInRepository);
                 await File.WriteAllBytesAsync(pathToImage, imageBytes);
-                _gitConnector.AddFileToRepository(pathInRepository);
+                _gitConnector.AddFileWithoutCommit(pathInRepository);
                 return extension;
             }
             else
