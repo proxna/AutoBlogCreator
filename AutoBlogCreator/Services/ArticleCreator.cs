@@ -83,7 +83,7 @@ namespace AutoBlogCreator.Services
         private string GetTitle(string content)
         {
             var firstSentence = content.Split('\n').First().Substring(2);
-            return firstSentence.RemoveWhitespaces().RemovePolishCharacters();
+            return firstSentence.RemoveWhitespaces().RemovePolishCharacters().RemoveSpecialCharacters();
         }
     }
 }

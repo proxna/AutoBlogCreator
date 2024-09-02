@@ -8,6 +8,19 @@ namespace AutoBlogCreator
     {
         public static string RemoveWhitespaces(this string input) => string.Concat(input.Where(c => !Char.IsWhiteSpace(c)));
 
+        public static string RemoveSpecialCharacters(this string input)
+        {
+            StringBuilder result = new StringBuilder(input.Length);
+            foreach (char character in input)
+            {
+                if (Char.IsLetterOrDigit(character))
+                {
+                    result.Append(character);
+                }
+            }
+            return result.ToString();
+        }
+
         private static readonly Dictionary<char, char> PolishCharReplacements = new Dictionary<char, char>
         {
             {'ą', 'a'}, {'ć', 'c'}, {'ę', 'e'}, {'ł', 'l'}, {'ń', 'n'}, {'ó', 'o'}, {'ś', 's'}, {'ż', 'z'}, {'ź', 'z'},
