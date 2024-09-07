@@ -30,7 +30,12 @@ namespace AutoBlogCreator.Services
         {
             string directoryName = GetTitle(news.Text);
             string localPath = _configuration.GetLocalPath();
-            string pathInRepository = Path.Combine("content", "posts", directoryName); ;
+            string pathInRepository = Path.Combine("content", "posts", directoryName);
+
+            //don't edit existing news
+            if (Directory.Exists(Path.Combine(localPath, pathInRepository)))
+                return;
+
             Directory.CreateDirectory(Path.Combine(localPath, pathInRepository));
             string imageExtension = await SaveImageFromUrl(news.ImageUrl, pathInRepository);
             string pathInFileRepository = Path.Combine(pathInRepository, "index.md");
@@ -45,7 +50,7 @@ namespace AutoBlogCreator.Services
             StringBuilder stringBuilder = new();
             stringBuilder.AppendLine("---");
             stringBuilder.AppendLine("title: " + news.Text.Split('\n').First().Substring(2).Replace(":", string.Empty));
-            stringBuilder.AppendLine("date: " + DateTime.Now.ToString("yyyy-MM-dd"));
+            stringBuilder.AppendLine("date: " + DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz"));
             stringBuilder.AppendLine("tags: " + news.Tags.Replace(":", string.Empty));
             stringBuilder.AppendLine("image: image" + imageExtension);
             stringBuilder.AppendLine("---");
