@@ -4,12 +4,20 @@ namespace AutoBlogCreator.Services
 {
     public class ArticleAdjuster : IArticleAdjuster
     {
-        public string AdjustArticle(string article)
+        public async Task<string> AdjustArticle(string article)
         {
             foreach (var youtubeVideoLink in GetYoutubeLinks(article))
             {
-                string embedHtml = $"<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/{youtubeVideoLink.Groups[1].Value}\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
-                article = article.Replace(youtubeVideoLink.Value, embedHtml);
+                bool isValid = await IsValidYoutubeId(youtubeVideoLink.Groups[1].Value);
+                if (isValid)
+                {
+                    string embedHtml = $"<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/{youtubeVideoLink.Groups[1].Value}\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
+                    article = article.Replace(youtubeVideoLink.Value, embedHtml);
+                }
+                else
+                {
+                    article = article.Replace(youtubeVideoLink.Value, string.Empty);
+                }
             }
 
             foreach (var tweetLink in GetTweetLinks(article))
@@ -19,7 +27,25 @@ namespace AutoBlogCreator.Services
                 article = article.Replace(tweetLink, embedHtml);
             }
 
+            article = Regex.Replace(article, @"(?:https?:\/\/)?(?:www\.)?(?:\S+\.)*x\.com\S*", string.Empty);
+
             return article;
+        }
+
+        private async Task<bool> IsValidYoutubeId(string id)
+        {
+            using HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync($"http://img.youtube.com/vi/{id}/mqdefault.jpg");
+            return response.IsSuccessStatusCode;
+        }
+
+        private bool IsValidTwitterLink(string link)
+        {
+            if (string.IsNullOrWhiteSpace(link)) return false;
+            string tweetId = link.Split('/').Last();
+            if (string.IsNullOrWhiteSpace(tweetId)) return false;
+            if (!int.TryParse(tweetId.Substring(0, 2), out int idPrefix)) return false;
+            return idPrefix >= 18;
         }
 
         private IEnumerable<Match> GetYoutubeLinks(string text)

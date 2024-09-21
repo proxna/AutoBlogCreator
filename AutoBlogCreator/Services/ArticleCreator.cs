@@ -37,7 +37,7 @@ namespace AutoBlogCreator.Services
                 return;
 
             Directory.CreateDirectory(Path.Combine(localPath, pathInRepository));
-            string imageExtension = await SaveImageFromUrl(news.ImageUrl, pathInRepository);
+            string imageExtension = await SaveImageFromUrl(news.ImageUrl.ExtractUrlFromString(), pathInRepository);
             string pathInFileRepository = Path.Combine(pathInRepository, "index.md");
             string pathToFile = Path.Combine(localPath, pathInFileRepository);
             string fullArticle = GetArticleHeader(news, imageExtension) + news.Text;

@@ -1,5 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using AutoBlogCreator.Models;
 
 namespace AutoBlogCreator
@@ -42,6 +43,21 @@ namespace AutoBlogCreator
             RepositoryInfo repositoryInfo = new RepositoryInfo();
             configuration.GetSection("RepositoryInfo").Bind(repositoryInfo);
             return repositoryInfo.LocalPath;
+        }
+
+        public static string ExtractUrlFromString(this string input)
+        {
+            string pattern = @"(https?://[^\s()]+)";
+            Regex regex = new Regex(pattern);
+            Match match = regex.Match(input);
+            if (match.Success)
+            {
+                return match.Value;
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
     }
 }

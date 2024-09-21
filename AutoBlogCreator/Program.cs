@@ -31,7 +31,7 @@ app.MapPost("/article", async (News news, IArticleCreator articleCreator) =>
 app.MapGet("/artwork/{name}", async (string name, ILinkToImageRetriever linkRetriever) =>
     await linkRetriever.GetImageLink(name));
 
-app.MapPost("/article/adjust", (ArticleToAdjust article, IArticleAdjuster articleAdjuster) =>
-    articleAdjuster.AdjustArticle(article.Article));
+app.MapPost("/article/adjust", async (ArticleToAdjust article, IArticleAdjuster articleAdjuster) =>
+    await articleAdjuster.AdjustArticle(article.Article));
 
 app.Run();

@@ -2,6 +2,6 @@
 {
     public interface IArticleAdjuster
     {
-        string AdjustArticle(string article);
+        Task<string> AdjustArticle(string article);
     }
 }
