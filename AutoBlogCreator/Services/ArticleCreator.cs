@@ -81,6 +81,7 @@ namespace AutoBlogCreator.Services
             }
             else
             {
+                //placeholder image
                 return string.Empty;
             }
         }

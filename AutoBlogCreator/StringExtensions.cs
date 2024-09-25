@@ -47,7 +47,7 @@ namespace AutoBlogCreator
 
         public static string ExtractUrlFromString(this string input)
         {
-            string pattern = @"(https?://[^\s()]+)";
+            string pattern = @"(https?:\/\/[^\s\[\]]+\.[^\s\[\]\(\)]+)";
             Regex regex = new Regex(pattern);
             Match match = regex.Match(input);
             if (match.Success)

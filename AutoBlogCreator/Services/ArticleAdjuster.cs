@@ -22,9 +22,17 @@ namespace AutoBlogCreator.Services
 
             foreach (var tweetLink in GetTweetLinks(article))
             {
-                string urlEncodedTweetLink = System.Web.HttpUtility.UrlEncode(tweetLink.Replace("x.com", "twitter.com"));
-                string embedHtml = $"<iframe border=0 frameborder=0 height=250 width=550\r\n src=\"https://twitframe.com/show?url={urlEncodedTweetLink}\"></iframe>";
-                article = article.Replace(tweetLink, embedHtml);
+                bool isValid = IsValidTwitterLink(tweetLink);
+                if (isValid)
+                {
+                    string urlEncodedTweetLink = System.Web.HttpUtility.UrlEncode(tweetLink.Replace("x.com", "twitter.com"));
+                    string embedHtml = $"<iframe border=0 frameborder=0 height=250 width=550\r\n src=\"https://twitframe.com/show?url={urlEncodedTweetLink}\"></iframe>";
+                    article = article.Replace(tweetLink, embedHtml);
+                }
+                else
+                {
+                    article = article.Replace(tweetLink, string.Empty);
+                }
             }
 
             article = Regex.Replace(article, @"(?:https?:\/\/)?(?:www\.)?(?:\S+\.)*x\.com\S*", string.Empty);
@@ -66,7 +74,7 @@ namespace AutoBlogCreator.Services
         public IEnumerable<string> GetTweetLinks(string text)
         {
             // Regular expression pattern to match tweet links
-            string pattern = @"(?:https?:\/\/)?(?:www\.)?(twitter|x)\.com\/(?:#!\/)?(\w+)\/status(?:es)?\/(\d+)";
+            string pattern = @"(?:https?:\/\/)(?:www\.)?(twitter|x)\.com\/.+";
 
             // Match tweet links in the text
             MatchCollection matches = Regex.Matches(text, pattern);
