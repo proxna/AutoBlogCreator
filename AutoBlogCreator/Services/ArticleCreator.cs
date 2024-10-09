@@ -51,7 +51,7 @@ namespace AutoBlogCreator.Services
             stringBuilder.AppendLine("---");
             stringBuilder.AppendLine("title: " + news.Text.Split('\n').First().Substring(2).Replace(":", string.Empty)).Replace("\"", string.Empty);
             stringBuilder.AppendLine("date: " + DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz"));
-            stringBuilder.AppendLine("tags: " + news.Tags.Replace(":", string.Empty));
+            stringBuilder.AppendLine("tags: " + news.Tags.Replace(":", string.Empty).Replace("#", string.Empty));
             stringBuilder.AppendLine("image: image" + imageExtension);
             stringBuilder.AppendLine("---");
             stringBuilder.AppendLine();

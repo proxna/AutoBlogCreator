@@ -35,7 +35,7 @@ namespace AutoBlogCreator.Services
                 }
             }
 
-            article = Regex.Replace(article, @"(?:https?:\/\/)?(?:www\.)?(?:\S+\.)*x\.com\S*", string.Empty);
+            article = Regex.Replace(article, @"(?:https?:\/\/)(?:www\.)?(?:\S+\.)*x\.com\S*", string.Empty);
 
             return article;
         }
